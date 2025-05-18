@@ -10,7 +10,7 @@ namespace SiphoEngine
     {
         private RenderWindow? _window;
         private Clock? _gameClock;
-
+        public event Action OnRunning;
         public void Run(uint width = 800, uint height = 600, string title = "SiphoEngine Game", bool fullscreen = false)
         {
             _window = new RenderWindow(
@@ -19,32 +19,27 @@ namespace SiphoEngine
                 fullscreen ? Styles.Fullscreen : Styles.Default
             );
 
-            View gameView = new View(new FloatRect(0, 0, width, height));
-            View renderView = gameView;
+            GameEngine.InitializeWindow(_window);
 
             _window.Closed += (sender, e) => _window.Close();
-            _window.Resized += (sender, e) =>
-            {
-                UpdateViewForAspectRatio(gameView, renderView);
-            };
+            _window.Resized += OnWindowResized;
 
             _gameClock = new Clock();
             Input.Initialize(_window);
 
-            UpdateViewForAspectRatio(gameView, renderView);
+            OnRunning?.Invoke();
 
             while (_window.IsOpen)
             {
                 _window.DispatchEvents();
                 _window.Clear(Color.Black);
 
-                _window.SetView(gameView);
-
                 float deltaTime = _gameClock.Restart().AsSeconds();
                 Time.Update(deltaTime);
                 GameEngine.Update(Time.DeltaTime);
 
-                _window.SetView(renderView);
+                // Установка вида камеры перед отрисовкой
+                GameEngine.BeforeRender();
                 GameEngine.ActiveScene?.Draw(_window);
 
                 _window.Display();
@@ -75,6 +70,14 @@ namespace SiphoEngine
 
             renderView.Size = gameView.Size;
             renderView.Center = gameView.Center;
+        }
+
+        private void OnWindowResized(object sender, SizeEventArgs e)
+        {
+            foreach (var camera in GameEngine.GetAllCameras())
+            {
+                camera.OnWindowResized(e.Width, e.Height);
+            }
         }
     }
 }

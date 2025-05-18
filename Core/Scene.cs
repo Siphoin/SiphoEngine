@@ -38,14 +38,7 @@ namespace SiphoEngine.Core
 
             internal void RegisterComponent(Component component)
             {
-                if (component is IAwakable awakable)
-                {
-                    if (!_awakables.Contains(awakable))
-                    {
-                        awakable.Awake();
-                        _awakables.Add(awakable);
-                    }
-                }
+                if (component is IAwakable awakable) _awakables.Add(awakable);
                 if (component is IStartable startable) _startables.Add(startable);
                 if (component is IUpdatable updatable) _updatables.Add(updatable);
                 if (component is IFixedUpdatable fixedUpdatable) _fixedUpdatables.Add(fixedUpdatable);
