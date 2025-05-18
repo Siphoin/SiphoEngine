@@ -50,6 +50,11 @@ namespace SiphoEngine.Core
         public static void CreatePrefab(string prefabName, GameObject gameObject)
         {
             string path = GetPrefabPath(prefabName);
+
+            if (File.Exists(path))
+            {
+                return;
+            }
             var prefabData = new PrefabData
             {
                 Position = gameObject.Transform.Position,
