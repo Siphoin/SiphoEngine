@@ -51,10 +51,9 @@ namespace SiphoEngine.Core
         {
             string path = Path.Combine(PrefabsDir, $"{prefabName}.prefab");
 
-            // В режиме Release проверяем существование префаба
             if (File.Exists(path))
             {
-                return; // Префаб уже существует, ничего не делаем
+                return;
             }
 
             var prefabData = new PrefabData
