@@ -49,7 +49,7 @@ namespace SiphoEngine.Components
         {
             if (_hasSprite && _sprite != null)
             {
-                _sprite.Position = Transform.Position;
+                _sprite.Position = Transform.WorldPosition;
                 _sprite.Rotation = Transform.Rotation;
                 _sprite.Scale = Transform.Scale;
                 _sprite.Color = Color;
@@ -58,7 +58,7 @@ namespace SiphoEngine.Components
             }
             else
             {
-                _fallbackShape.Position = Transform.Position;
+                _fallbackShape.Position = Transform.WorldPosition;
                 _fallbackShape.Rotation = Transform.Rotation;
                 _fallbackShape.Scale = Transform.Scale;
                 target.Draw(_fallbackShape);

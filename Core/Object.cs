@@ -2,5 +2,6 @@
 {
     public abstract class Object
     {
+        public abstract void Destroy();
     }
 }

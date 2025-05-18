@@ -31,19 +31,64 @@ namespace SiphoEngine.Core
             public GameObject CreateGameObject(string name = "GameObject")
             {
                 var gameObject = new GameObject(name);
+                AddGameObject(gameObject);
+                return gameObject;
+            }
+
+            public void AddGameObject (GameObject gameObject)
+            {
+                if (Contains(gameObject))
+                {
+                    throw new InvalidOperationException($"gamebject {gameObject.Name} contains in scene");
+                }
                 gameObject.Scene = this;
                 _gameObjects.Add(gameObject);
-                return gameObject;
+
+                foreach (var component in gameObject.Components)
+                {
+                    RegisterComponent(component);
+                }
+            }
+
+            private bool Contains (GameObject gameObject)
+            {
+                return _gameObjects.Contains(gameObject);
             }
 
             internal void RegisterComponent(Component component)
             {
-                if (component is IAwakable awakable) _awakables.Add(awakable);
+                if (component is IAwakable awakable)
+                {
+                    if (!_awakables.Contains(awakable))
+                    {
+                        awakable.Awake();
+                        _awakables.Add(awakable);
+                    }
+                }
                 if (component is IStartable startable) _startables.Add(startable);
                 if (component is IUpdatable updatable) _updatables.Add(updatable);
                 if (component is IFixedUpdatable fixedUpdatable) _fixedUpdatables.Add(fixedUpdatable);
                 if (component is ILateUpdatable lateUpdatable) _lateUpdatables.Add(lateUpdatable);
                 if (component is IDrawable drawable) _drawables.Add(drawable);
+            }
+
+            internal void UnregisterComponent(Component component)
+            {
+                if (component is IAwakable awakable) _awakables.Remove(awakable);
+                if (component is IStartable startable) _startables.Remove(startable);
+                if (component is IUpdatable updatable) _updatables.Remove(updatable);
+                if (component is IFixedUpdatable fixedUpdatable) _fixedUpdatables.Remove(fixedUpdatable);
+                if (component is ILateUpdatable lateUpdatable) _lateUpdatables.Remove(lateUpdatable);
+                if (component is IDrawable drawable) _drawables.Remove(drawable);
+            }
+
+            internal void DestroyGameObject (GameObject go)
+            {
+                foreach (var item in go.Components)
+                {
+                    UnregisterComponent(item);
+                }
+                _gameObjects.Remove(go);
             }
 
             public virtual void Initialize()
@@ -65,8 +110,10 @@ namespace SiphoEngine.Core
 
             public void Update(float deltaTime)
             {
-                foreach (var updatable in _updatables)
+
+                for (int i = 0; i < _updatables.Count; i++)
                 {
+                    IUpdatable? updatable = _updatables[i];
                     updatable.Update();
                 }
 
@@ -81,8 +128,9 @@ namespace SiphoEngine.Core
                 fixedUpdateAccumulator += deltaTime;
                 while (fixedUpdateAccumulator >= Time.FixedDeltaTime)
                 {
-                    foreach (var fixedUpdatable in _fixedUpdatables)
+                    for (int i = 0; i < _fixedUpdatables.Count; i++)
                     {
+                        IFixedUpdatable? fixedUpdatable = _fixedUpdatables[i];
                         fixedUpdatable.FixedUpdate();
                     }
                     fixedUpdateAccumulator -= Time.FixedDeltaTime;
@@ -91,16 +139,18 @@ namespace SiphoEngine.Core
 
             private void HandleLateUpdate()
             {
-                foreach (var lateUpdatable in _lateUpdatables)
+                for (int i = 0; i < _lateUpdatables.Count; i++)
                 {
+                    ILateUpdatable? lateUpdatable = _lateUpdatables[i];
                     lateUpdatable.LateUpdate();
                 }
             }
 
             public void Draw(RenderTarget target)
             {
-                foreach (var drawable in _drawables)
+                for (int i = 0; i < _drawables.Count; i++)
                 {
+                    IDrawable? drawable = _drawables[i];
                     drawable.Draw(target);
                 }
             }

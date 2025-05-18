@@ -1,6 +1,6 @@
 ﻿namespace SiphoEngine.Core.PlayerLoop
 {
-    internal interface IAwakable
+    public interface IAwakable
     {
         void Awake();
     }

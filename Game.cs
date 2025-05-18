@@ -19,6 +19,8 @@ namespace SiphoEngine
                 fullscreen ? Styles.Fullscreen : Styles.Default
             );
 
+            _window.SetVerticalSyncEnabled(true); // Синхронизация с монитором
+            GameEngine.InitializePrefabs();
             GameEngine.InitializeWindow(_window);
 
             _window.Closed += (sender, e) => _window.Close();

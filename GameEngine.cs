@@ -15,6 +15,16 @@ namespace SiphoEngine
 
         public static Scene ActiveScene => _activeScene;
 
+        public static void InitializePrefabs()
+        {
+            // Создаем защищенную директорию для префабов
+            var prefabsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/Prefabs");
+            if (!Directory.Exists(prefabsDir))
+            {
+                Directory.CreateDirectory(prefabsDir);
+            }
+        }
+
         public static void InitializeWindow(RenderWindow window)
         {
             MainWindow = window;
@@ -30,7 +40,7 @@ namespace SiphoEngine
         {
             if (_cameras.Count > 0)
             {
-                MainWindow.SetView(_cameras[0].GetView());
+                MainWindow.SetView(Camera.Main.GetView());
             }
         }
 

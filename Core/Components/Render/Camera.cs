@@ -4,18 +4,24 @@ using SiphoEngine.Core.PlayerLoop;
 
 namespace SiphoEngine.Core.Components.Render
 {
-    public class Camera : Component, IAwakable
+    public class Camera : Component, IAwakable, IUpdatable
     {
         private View _view;
         public float OrthographicSize { get; set; } = 5f;
-        public int Priority { get; set; } = 0;
         public Color BackgroundColor { get; set; } = Color.Black;
 
-        public Camera? Main => GameEngine.GetAllCameras().FirstOrDefault(x => x.GameObject.Tag == Tags.MAIN_CAMERA_TAG);
+        public static Camera? Main => GameEngine.GetAllCameras().FirstOrDefault(x => x.GameObject.Tag == Tags.MAIN_CAMERA_TAG);
+
+        public int Priority { get; internal set; }
 
         public void Awake()
         {
             GameEngine.RegisterCamera(this);
+            UpdateView();
+        }
+
+        public void Update()
+        {
             UpdateView();
         }
 
@@ -26,11 +32,14 @@ namespace SiphoEngine.Core.Components.Render
             var windowSize = GameEngine.MainWindow.Size;
             float aspectRatio = (float)windowSize.X / windowSize.Y;
 
-            // Фиксируем ширину, высота рассчитывается автоматически
-            float viewHeight = OrthographicSize * 2f;
-            float viewWidth = viewHeight * aspectRatio;
+            // Центр камеры в мировых координатах
+            Vector2f viewCenter = Transform.Position;
 
-            _view = new View(Transform.Position, new Vector2f(viewWidth, viewHeight));
+            _view = new View(
+                center: viewCenter,
+                size: new Vector2f(OrthographicSize * 2 * aspectRatio, OrthographicSize * 2)
+            );
+
         }
 
         public void OnWindowResized(uint width, uint height)
