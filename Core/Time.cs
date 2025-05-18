@@ -7,13 +7,10 @@
         public static float TimeScale { get; set; } = 1f;
         public static float TimeSinceStartup { get; private set; }
 
-        private static float _lastFrameTime;
-
-        internal static void Update(float currentTime)
+        public static void Update(float rawDeltaTime)
         {
-            DeltaTime = (currentTime - _lastFrameTime) * TimeScale;
+            DeltaTime = rawDeltaTime * TimeScale; // Убираем лишние вычисления
             TimeSinceStartup += DeltaTime;
-            _lastFrameTime = currentTime;
         }
     }
 }

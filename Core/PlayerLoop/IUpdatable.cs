@@ -1,6 +1,6 @@
 ﻿namespace SiphoEngine.Core.PlayerLoop
 {
-    internal interface IUpdatable
+    public interface IUpdatable
     {
         void Update();
     }

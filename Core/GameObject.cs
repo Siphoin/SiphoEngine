@@ -10,7 +10,7 @@ namespace SiphoEngine.Core
 
         public string Name { get; set; }
         public bool ActiveSelf { get; set; } = true;
-        public Scene Scene { get; internal set; }
+        public Scene? Scene { get; internal set; }
 
         public GameObject(string name = "GameObject")
         {
