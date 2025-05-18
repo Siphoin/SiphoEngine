@@ -12,6 +12,8 @@ namespace SiphoEngine.Core
         public bool ActiveSelf { get; set; } = true;
         public Scene? Scene { get; internal set; }
 
+        public string Tag { get; set; }
+
         public GameObject(string name = "GameObject")
         {
             Name = name;

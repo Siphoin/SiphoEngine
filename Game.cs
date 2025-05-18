@@ -46,31 +46,6 @@ namespace SiphoEngine
             }
         }
 
-        private void UpdateViewForAspectRatio(View gameView, View renderView)
-        {
-            float gameAspect = gameView.Size.X / gameView.Size.Y;
-            float windowAspect = (float)_window.Size.X / _window.Size.Y;
-
-            if (windowAspect > gameAspect)
-            {
-                float viewWidth = gameView.Size.Y * windowAspect;
-                renderView.Viewport = new FloatRect(
-                    (1 - gameAspect / windowAspect) / 2, 0,
-                    gameAspect / windowAspect, 1
-                );
-            }
-            else
-            {
-                float viewHeight = gameView.Size.X / windowAspect;
-                renderView.Viewport = new FloatRect(
-                    0, (1 - windowAspect / gameAspect) / 2,
-                    1, windowAspect / gameAspect
-                );
-            }
-
-            renderView.Size = gameView.Size;
-            renderView.Center = gameView.Center;
-        }
 
         private void OnWindowResized(object sender, SizeEventArgs e)
         {

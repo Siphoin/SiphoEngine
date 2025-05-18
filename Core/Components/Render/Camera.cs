@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using SFML.System;
 using SiphoEngine.Core.PlayerLoop;
 
@@ -11,10 +6,12 @@ namespace SiphoEngine.Core.Components.Render
 {
     public class Camera : Component, IAwakable
     {
+        private View _view;
         public float OrthographicSize { get; set; } = 5f;
         public int Priority { get; set; } = 0;
-        private View _view;
         public Color BackgroundColor { get; set; } = Color.Black;
+
+        public Camera? Main => GameEngine.GetAllCameras().FirstOrDefault(x => x.GameObject.Tag == Tags.MAIN_CAMERA_TAG);
 
         public void Awake()
         {
