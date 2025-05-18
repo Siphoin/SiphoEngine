@@ -3,7 +3,7 @@ using SiphoEngine.Core.SiphoEngine;
 
 namespace SiphoEngine.Core
 {
-    public class GameObject : Object
+    public class GameObject : Object, IDisposable
     {
         private List<Component> _components = new List<Component>();
         private bool _activeSelf;
@@ -74,14 +74,19 @@ namespace SiphoEngine.Core
         public override void Destroy ()
         {
             Scene?.DestroyGameObject(this);
+            Dispose();
         }
 
         public virtual void OnEnable() { }
         public virtual void OnDisable() { }
 
-        public object Find(string v)
+
+        public void Dispose()
         {
-            throw new NotImplementedException();
+            foreach (var item in _components)
+            {
+                item.Dispose();
+            }
         }
     }
 }

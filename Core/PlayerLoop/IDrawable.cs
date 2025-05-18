@@ -1,6 +1,6 @@
 ﻿using SFML.Graphics;
 
-namespace SiphoEngine.Core
+namespace SiphoEngine.Core.PlayerLoop
 {
     internal interface IDrawable
     {

@@ -48,6 +48,7 @@ namespace SiphoEngine
                 float deltaTime = _gameClock.Restart().AsSeconds();
                 Time.Update(deltaTime);
                 GameEngine.Update(Time.DeltaTime);
+                AudioEngine.Update();
 
                 if (_fullscreen)
                 {
