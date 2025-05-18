@@ -11,7 +11,7 @@ namespace SiphoEngine.Core
 {
     public static class Prefab
     {
-        private const string PrefabsDir = "Resources/Prefabs/";
+        private static readonly string PrefabsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Prefabs");
         private static Dictionary<string, PrefabData> _prefabs = new Dictionary<string, PrefabData>();
 
         [Serializable]
@@ -49,13 +49,7 @@ namespace SiphoEngine.Core
 
         public static void CreatePrefab(string prefabName, GameObject gameObject)
         {
-            string path = Path.Combine(PrefabsDir, $"{prefabName}.prefab");
-
-            if (File.Exists(path))
-            {
-                return;
-            }
-
+            string path = GetPrefabPath(prefabName);
             var prefabData = new PrefabData
             {
                 Position = gameObject.Transform.Position,
@@ -112,11 +106,15 @@ namespace SiphoEngine.Core
             SavePrefab(prefabName, prefabData);
         }
 
+        private static string GetPrefabPath(string prefabName)
+        {
+            return Path.Combine(PrefabsDir, $"{prefabName}.prefab");
+        }
 
         private static void SavePrefab(string prefabName, PrefabData data)
         {
             string json = JsonConvert.SerializeObject(data, Formatting.Indented);
-            string path = Path.Combine(PrefabsDir, $"{prefabName}.prefab");
+            string path = GetPrefabPath(prefabName);
 
 #if !DEBUG
             byte[] encrypted = SimpleEncrypt(json);
@@ -128,7 +126,7 @@ namespace SiphoEngine.Core
 
         private static PrefabData LoadPrefab(string prefabName)
         {
-            string path = Path.Combine(PrefabsDir, $"{prefabName}.prefab");
+            string path = GetPrefabPath(prefabName);
 
 #if !DEBUG
             byte[] encrypted = File.ReadAllBytes(path);
@@ -140,29 +138,43 @@ namespace SiphoEngine.Core
             return JsonConvert.DeserializeObject<PrefabData>(json);
         }
 
-        public static GameObject Instantiate(string prefabName, string name = null)
+        public static GameObject Instantiate(string prefabName, GameObject sourceObject = null, string name = null)
         {
+            string path = GetPrefabPath(prefabName);
+            PrefabData prefabData;
+
+            if (!File.Exists(path))
+            {
+                if (sourceObject == null)
+                {
+                    throw new ArgumentException($"Prefab '{prefabName}' doesn't exist and no source object provided");
+                }
+
+                CreatePrefab(prefabName, sourceObject);
+                prefabData = LoadPrefab(prefabName);
+            }
+            else
+            {
 #if !DEBUG
-            // В режиме Release всегда загружаем из файла
-            var prefabData = LoadPrefab(prefabName);
+                prefabData = LoadPrefab(prefabName);
 #else
-    if (!_prefabs.TryGetValue(prefabName, out var prefabData))
-    {
-        prefabData = LoadPrefab(prefabName);
-        _prefabs[prefabName] = prefabData;
-    }
+                if (!_prefabs.TryGetValue(prefabName, out prefabData))
+                {
+                    prefabData = LoadPrefab(prefabName);
+                    _prefabs[prefabName] = prefabData;
+                }
 #endif
+            }
 
             var go = new GameObject(name ?? prefabName)
             {
                 Transform =
-        {
-            Position = prefabData.Position,
-            Rotation = prefabData.Rotation,
-            Scale = prefabData.Scale
-        }
+                {
+                    Position = prefabData.Position,
+                    Rotation = prefabData.Rotation,
+                    Scale = prefabData.Scale
+                }
             };
-
 
             foreach (var componentData in prefabData.Components)
             {
@@ -197,9 +209,11 @@ namespace SiphoEngine.Core
                     }
                 }
             }
+
             GameEngine.ActiveScene?.AddGameObject(go);
             return go;
         }
+
 #if !DEBUG
         private static byte[] SimpleEncrypt(string data)
         {
