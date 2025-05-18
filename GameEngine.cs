@@ -7,6 +7,7 @@ namespace SiphoEngine
 {
     public static class GameEngine
     {
+        public static event Action OnLoadingPrefabs;
         private static Scene _activeScene;
         private static List<Scene> _scenes = new List<Scene>();
 
@@ -15,7 +16,7 @@ namespace SiphoEngine
 
         public static Scene ActiveScene => _activeScene;
 
-        public static void InitializePrefabs()
+        internal static void InitializePrefabs()
         {
             // Создаем защищенную директорию для префабов
             var prefabsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/Prefabs");
@@ -23,20 +24,22 @@ namespace SiphoEngine
             {
                 Directory.CreateDirectory(prefabsDir);
             }
+
+            OnLoadingPrefabs?.Invoke();
         }
 
-        public static void InitializeWindow(RenderWindow window)
+        internal static void InitializeWindow(RenderWindow window)
         {
             MainWindow = window;
         }
 
-        public static void RegisterCamera(Camera camera)
+        internal static void RegisterCamera(Camera camera)
         {
             _cameras.Add(camera);
             _cameras = _cameras.OrderByDescending(c => c.Priority).ToList();
         }
 
-        public static void BeforeRender()
+        internal static void BeforeRender()
         {
             if (_cameras.Count > 0)
             {

@@ -11,6 +11,7 @@ namespace SiphoEngine
         private RenderWindow? _window;
         private Clock? _gameClock;
         public event Action OnRunning;
+
         public void Run(uint width = 800, uint height = 600, string title = "SiphoEngine Game", bool fullscreen = false)
         {
             _window = new RenderWindow(

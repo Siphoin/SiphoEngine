@@ -78,5 +78,10 @@ namespace SiphoEngine.Core
 
         public virtual void OnEnable() { }
         public virtual void OnDisable() { }
+
+        public object Find(string v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

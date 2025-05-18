@@ -31,5 +31,10 @@ namespace SiphoEngine.MathExtensions
         {
             return (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
         }
+
+        public static float Length(this Vector2f vector)
+        {
+            return (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+        }
     }
 }
