@@ -29,14 +29,14 @@ namespace SiphoEngine.Physics
             _rigidbodies.Remove(rb);
         }
 
-        public static void Update(float deltaTime)
+        public static void Update(float fixedTime)
         {
             foreach (var rb in _rigidbodies)
             {
                 if (EnableGravity && rb.UseGravity)
                     rb.AddForce(_gravity * rb.Mass);
 
-                rb.UpdatePhysics(deltaTime);
+                rb.UpdatePhysics(fixedTime);
             }
 
             for (int i = 0; i < _rigidbodies.Count; i++)
