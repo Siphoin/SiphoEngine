@@ -4,9 +4,9 @@ namespace SiphoEngine.Physics
 {
     public struct CollisionInfo
     {
-        public Rigidbody A;
-        public Rigidbody B;
-        public Vector2f Normal;
-        public float Depth;
+        public Rigidbody A {  get; set; }
+        public Rigidbody B { get; set; }
+        public Vector2f Normal { get; set; }
+        public float Depth { get; set; }
     }
 }
