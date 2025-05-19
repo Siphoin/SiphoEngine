@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiphoEngine", "SiphoEngine.csproj", "{7D754612-5FAA-4301-939A-D8E907B8B57A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiphoEngineDemo", "..\SiphoEngineDemo\SiphoEngineDemo.csproj", "{CF6F0A88-6D8D-4CC3-8DDB-700819E328FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiphoEngineDebugConsole", "..\SiphoEngineDebugConsole\SiphoEngineDebugConsole.csproj", "{34B6AE1C-C95B-79A2-96E1-50E5634C5CA8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CF6F0A88-6D8D-4CC3-8DDB-700819E328FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF6F0A88-6D8D-4CC3-8DDB-700819E328FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF6F0A88-6D8D-4CC3-8DDB-700819E328FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34B6AE1C-C95B-79A2-96E1-50E5634C5CA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34B6AE1C-C95B-79A2-96E1-50E5634C5CA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34B6AE1C-C95B-79A2-96E1-50E5634C5CA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34B6AE1C-C95B-79A2-96E1-50E5634C5CA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -29,6 +29,12 @@ namespace SiphoEngine
             _gameView = new View(new FloatRect(0, 0, width, height));
 
             _window.SetVerticalSyncEnabled(true);
+#if DEBUG
+
+            Debug.Initialize();
+            Debug.EnableGlobalExceptionHandling();
+
+#endif
             GameEngine.InitializePrefabs();
             GameEngine.InitializeWindow(_window);
 
@@ -61,6 +67,10 @@ namespace SiphoEngine
 
                 _window.Display();
             }
+
+#if DEBUG
+            Debug.Shutdown();
+#endif
         }
 
         private void OnWindowResized(object sender, SizeEventArgs e)

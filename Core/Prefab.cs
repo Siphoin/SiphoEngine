@@ -167,6 +167,10 @@ namespace SiphoEngine.Core
                 {
                     prefabData = LoadPrefab(prefabName);
                     _prefabs[prefabName] = prefabData;
+
+#if DEBUG
+                    Log($"Prefab cached: Name: {prefabName}");
+#endif
                 }
 #endif
             }
@@ -216,6 +220,9 @@ namespace SiphoEngine.Core
             }
 
             GameEngine.ActiveScene?.AddGameObject(go);
+#if DEBUG
+            Log($"Prefab new instance: Name: {prefabName}");
+#endif
             return go;
         }
 
@@ -233,6 +240,12 @@ namespace SiphoEngine.Core
             for (int i = 0; i < data.Length; i++)
                 data[i] = (byte)(data[i] ^ 0x55);
             return System.Text.Encoding.UTF8.GetString(data);
+        }
+
+#else
+        private static void Log (object message)
+        {
+            Debug.Log($"Prefab Utility: {message}");
         }
 #endif
     }
