@@ -1,5 +1,7 @@
 ﻿using SFML.Graphics;
+using SiphoEngine.Core.Physics;
 using SiphoEngine.Core.PlayerLoop;
+using SiphoEngine.Physics;
 
 namespace SiphoEngine.Core
 {
@@ -87,6 +89,11 @@ namespace SiphoEngine.Core
                 foreach (var item in go.Components)
                 {
                     UnregisterComponent(item);
+
+                    if (item is Rigidbody rigidbody)
+                    {
+                        PhysicsEngine.UnregisterRigidbody(rigidbody);
+                    }
                 }
                 _gameObjects.Remove(go);
             }
