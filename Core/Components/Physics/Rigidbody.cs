@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using SFML.System;
 using SiphoEngine.Core;
+using SiphoEngine.Core.Physics;
 using SiphoEngine.Core.PlayerLoop;
 
 namespace SiphoEngine.Physics

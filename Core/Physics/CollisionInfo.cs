@@ -1,6 +1,7 @@
 ﻿using SFML.System;
+using SiphoEngine.Physics;
 
-namespace SiphoEngine.Physics
+namespace SiphoEngine.Core.Physics
 {
     public struct CollisionInfo
     {

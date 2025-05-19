@@ -2,7 +2,7 @@
 using SFML.Graphics;
 using SFML.System;
 
-namespace SiphoEngine
+namespace SiphoEngine.Core.Debugging
 {
     internal static class DebugDraw
     {

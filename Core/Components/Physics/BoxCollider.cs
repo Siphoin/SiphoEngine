@@ -1,5 +1,7 @@
 ﻿using SFML.System;
 using SiphoEngine.Core;
+using SiphoEngine.Core.Debugging;
+using SiphoEngine.Core.Physics;
 using SiphoEngine.MathExtensions;
 
 

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO.Pipes;
-namespace SiphoEngine
+namespace SiphoEngine.Core.Debugging
 {
 
     public static class Debug

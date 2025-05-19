@@ -6,6 +6,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SFML.System;
+using SiphoEngine.Core.Debugging;
 using SiphoEngine.Physics;
 
 namespace SiphoEngine.Core

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SiphoEngine
+namespace SiphoEngine.Core.Audio
 {
     public static class AudioEngine
     {

@@ -1,7 +1,8 @@
 ﻿using SFML.System;
 using SiphoEngine.MathExtensions;
+using SiphoEngine.Physics;
 
-namespace SiphoEngine.Physics
+namespace SiphoEngine.Core.Physics
 {
     public static class PhysicsEngine
     {
