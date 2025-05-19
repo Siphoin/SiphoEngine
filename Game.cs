@@ -3,6 +3,7 @@ using SFML.System;
 using SFML.Window;
 using SiphoEngine.Core;
 using SiphoEngine.Core.Components.Render;
+using SiphoEngine.Physics;
 using Time = SiphoEngine.Core.Time;
 
 namespace SiphoEngine
@@ -54,16 +55,21 @@ namespace SiphoEngine
                 float deltaTime = _gameClock.Restart().AsSeconds();
                 Time.Update(deltaTime);
                 GameEngine.Update(Time.DeltaTime);
+                PhysicsEngine.Update(Time.FixedDeltaTime);
                 AudioEngine.Update();
-
                 if (_fullscreen)
                 {
                     UpdateViewForFullscreen();
                     _window.SetView(_gameView);
                 }
 
+
                 GameEngine.BeforeRender();
                 GameEngine.ActiveScene?.Draw(_window);
+
+#if DEBUG
+                DebugDraw.Render(_window);
+#endif
 
                 _window.Display();
             }

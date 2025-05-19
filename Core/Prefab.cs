@@ -6,6 +6,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SFML.System;
+using SiphoEngine.Physics;
 
 namespace SiphoEngine.Core
 {
@@ -84,7 +85,7 @@ namespace SiphoEngine.Core
                     try
                     {
                         var value = prop.GetValue(component);
-                        if (value is GameObject || value is Transform)
+                        if (value is GameObject || value is Transform || value is Collider)
                         {
                             continue;
                         }

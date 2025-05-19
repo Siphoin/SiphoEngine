@@ -29,12 +29,24 @@ namespace SiphoEngine.MathExtensions
 
         public static float Magnitude(this Vector2f vector)
         {
-            return (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+            return vector.Length();
         }
 
         public static float Length(this Vector2f vector)
         {
             return (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+        }
+
+        public static float Dot(this Vector2f a, Vector2f b)
+        {
+            return a.X * b.X + a.Y * b.Y;
+        }
+
+        public static float Distance(this Vector2f a, Vector2f b)
+        {
+            float dx = a.X - b.X;
+            float dy = a.Y - b.Y;
+            return (float)Math.Sqrt(dx * dx + dy * dy);
         }
     }
 }
