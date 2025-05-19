@@ -11,25 +11,25 @@ namespace SiphoEngine.Physics
 
         public static Vector2f Gravity { get => _gravity; set => _gravity = value; }
 
-        public static void Initialize(Vector2f? gravity = null)
+        internal static void Initialize(Vector2f? gravity = null)
         {
             if (gravity.HasValue)
             {
                 _gravity = gravity.Value;
             }
         }
-        public static void RegisterRigidbody(Rigidbody rb)
+        internal static void RegisterRigidbody(Rigidbody rigidbody)
         {
-            if (!_rigidbodies.Contains(rb))
-                _rigidbodies.Add(rb);
+            if (!_rigidbodies.Contains(rigidbody))
+                _rigidbodies.Add(rigidbody);
         }
 
-        public static void UnregisterRigidbody(Rigidbody rb)
+        internal static void UnregisterRigidbody(Rigidbody rigidbody)
         {
-            _rigidbodies.Remove(rb);
+            _rigidbodies.Remove(rigidbody);
         }
 
-        public static void Update(float fixedTime)
+        internal static void Update(float fixedTime)
         {
             foreach (var rb in _rigidbodies)
             {
