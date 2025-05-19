@@ -36,6 +36,7 @@ namespace SiphoEngine.Core.Physics
 
         internal static void Update(float fixedTime)
         {
+            // Update physics first
             foreach (var rb in _rigidbodies)
             {
                 if (EnableGravity && rb.UseGravity)
@@ -44,14 +45,36 @@ namespace SiphoEngine.Core.Physics
                 rb.UpdatePhysics(fixedTime);
             }
 
+            // Check collisions
             for (int i = 0; i < _rigidbodies.Count; i++)
             {
                 for (int j = i + 1; j < _rigidbodies.Count; j++)
                 {
-                    if (CheckCollision(_rigidbodies[i], _rigidbodies[j], out CollisionInfo info))
+                    var rbA = _rigidbodies[i];
+                    var rbB = _rigidbodies[j];
+
+                    if (CheckCollision(rbA, rbB, out CollisionInfo info))
                     {
-                        ResolveCollision(info);
+                        // Record collision for events
+                        rbA.Collider?.AddCurrentCollision(rbB.Collider);
+                        rbB.Collider?.AddCurrentCollision(rbA.Collider);
+
+                        // Only resolve if neither is a trigger
+                        if (!rbA.Collider.IsTrigger && !rbB.Collider.IsTrigger)
+                        {
+                            ResolveCollision(info);
+                        }
                     }
+                }
+            }
+
+            // Update collision events
+            for (int i = 0; i < _rigidbodies.Count; i++)
+            {
+                Rigidbody? rb = _rigidbodies[i];
+                if (rb.Collider != null)
+                {
+                    rb.Collider.UpdateCollisionEvents();
                 }
             }
         }

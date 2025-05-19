@@ -15,6 +15,7 @@ namespace SiphoEngine.Physics
         private float _mass = 1f;
         [JsonIgnore]
         private Collider _collider;
+        private bool _isTrigger;
 
         public float Mass
         {
@@ -25,17 +26,27 @@ namespace SiphoEngine.Physics
         public Vector2f Velocity => _velocity;
         public bool UseGravity { get; set; } = true;
 
-        public float InverseMass { get; private set; } = 1f;
-        public float Restitution
+        public bool IsTrigger
         {
-            get => _restitution;
-            set => _restitution = Math.Clamp(value, 0f, 1f);
+            get => _isTrigger;
+            set
+            {
+                _isTrigger = value;
+                if (_collider != null)
+                {
+                    _collider.IsTrigger = value;
+                }
+            }
         }
         public Collider? Collider => _collider ??= GameObject.GetComponent<Collider>();
 
         public void Awake()
         {
             _collider = GameObject.GetComponent<Collider>();
+            if (_collider != null)
+            {
+                _collider.IsTrigger = _isTrigger;
+            }
             PhysicsEngine.RegisterRigidbody(this);
         }
 
