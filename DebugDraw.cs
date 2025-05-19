@@ -1,58 +1,50 @@
 ﻿
 using SFML.Graphics;
 using SFML.System;
-using System.Collections.Generic;
 
 namespace SiphoEngine
 {
     internal static class DebugDraw
     {
-        private static List<RectangleShape> _boxColliders = new List<RectangleShape>();
-        private static List<CircleShape> _circleColliders = new List<CircleShape>();
+        private static readonly RectangleShape _boxShape = new RectangleShape();
+        private static readonly CircleShape _circleShape = new CircleShape(0);
+        private static readonly List<Vertex[]> _lines = new List<Vertex[]>();
 
         internal static void DrawBoxCollider(Vector2f position, Vector2f size, Vector2f offset)
         {
-            var rect = new RectangleShape(size)
-            {
-                Position = position + offset - size / 2,
-                FillColor = Color.Transparent,
-                OutlineColor = Color.Green,
-                OutlineThickness = 1f
-            };
-            _boxColliders.Add(rect);
+            // Используем один объект для всех прямоугольников
+            _boxShape.Size = size;
+            _boxShape.Position = position + offset - size / 2;
+            _boxShape.FillColor = Color.Transparent;
+            _boxShape.OutlineColor = Color.Green;
+            _boxShape.OutlineThickness = 1f;
+            GameEngine.MainWindow?.Draw(_boxShape);
         }
 
         internal static void DrawCircleCollider(Vector2f position, float radius, Vector2f offset)
         {
-            var circle = new CircleShape(radius)
-            {
-                Position = position + offset - new Vector2f(radius, radius),
-                FillColor = Color.Transparent,
-                OutlineColor = Color.Green,
-                OutlineThickness = 1f
-            };
-            _circleColliders.Add(circle);
+            _circleShape.Radius = radius;
+            _circleShape.Position = position + offset - new Vector2f(radius, radius);
+            _circleShape.FillColor = Color.Transparent;
+            _circleShape.OutlineColor = Color.Green;
+            _circleShape.OutlineThickness = 1f;
+
+            GameEngine.MainWindow?.Draw(_circleShape);
         }
+
 
         internal static void Render(RenderTarget target)
         {
-            foreach (var box in _boxColliders)
+            foreach (var line in _lines)
             {
-                target.Draw(box);
+                target.Draw(line, PrimitiveType.Lines);
             }
-
-            foreach (var circle in _circleColliders)
-            {
-                target.Draw(circle);
-            }
-
-            Clear();
+            _lines.Clear();
         }
 
-        private static void Clear()
+        internal static void Clear()
         {
-            _boxColliders.Clear();
-            _circleColliders.Clear();
+            _lines.Clear();
         }
     }
 }

@@ -26,7 +26,11 @@ namespace SiphoEngine.Physics
 
         internal static void UnregisterRigidbody(Rigidbody rigidbody)
         {
-            _rigidbodies.Remove(rigidbody);
+            if (rigidbody != null && _rigidbodies.Contains(rigidbody))
+            {
+                _rigidbodies.Remove(rigidbody);
+                rigidbody.Dispose(); // Добавляем очистку
+            }
         }
 
         internal static void Update(float fixedTime)
