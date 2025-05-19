@@ -77,7 +77,6 @@ namespace SiphoEngine
                 e.SetObserved();
             };
         }
-#endif
 
         private static void WaitForConnection()
         {
@@ -92,6 +91,8 @@ namespace SiphoEngine
                 Shutdown();
             }
         }
+
+#endif
 
         public static void Log(object message)
         {

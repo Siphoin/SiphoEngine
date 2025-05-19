@@ -14,10 +14,16 @@ namespace SiphoEngine
         private View _gameView;
         private bool _fullscreen;
 
-        public event Action OnRunning;
+        public event Action? OnRunning;
 
         public void Run(uint width = 800, uint height = 600, string title = "SiphoEngine Game", bool fullscreen = false)
         {
+#if DEBUG
+
+            Debug.Initialize();
+            Debug.EnableGlobalExceptionHandling();
+
+#endif
             _fullscreen = fullscreen;
             _window = new RenderWindow(
                 fullscreen ? VideoMode.DesktopMode : new VideoMode(width, height),
@@ -29,12 +35,6 @@ namespace SiphoEngine
             _gameView = new View(new FloatRect(0, 0, width, height));
 
             _window.SetVerticalSyncEnabled(true);
-#if DEBUG
-
-            Debug.Initialize();
-            Debug.EnableGlobalExceptionHandling();
-
-#endif
             GameEngine.InitializePrefabs();
             GameEngine.InitializeWindow(_window);
 
