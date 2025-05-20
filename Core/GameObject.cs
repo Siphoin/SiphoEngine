@@ -1,4 +1,5 @@
-﻿using SiphoEngine.Core.Coroutines;
+﻿using SiphoEngine.Core.Components;
+using SiphoEngine.Core.Coroutines;
 using SiphoEngine.Core.PlayerLoop;
 using SiphoEngine.Core.SiphoEngine;
 

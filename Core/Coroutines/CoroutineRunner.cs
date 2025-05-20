@@ -1,7 +1,7 @@
 ﻿using SiphoEngine.Core.Coroutines.Yeilds;
 using SiphoEngine.Core.Coroutines;
 using SiphoEngine.Core.Debugging;
-namespace SiphoEngine.Core.Components
+namespace SiphoEngine.Core.Coroutines
 {
     internal class CoroutineRunner : ICoroutineRunner
     {
