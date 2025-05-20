@@ -1,6 +1,4 @@
-﻿using SiphoEngine.Core.Debugging;
-
-namespace SiphoEngine.Core.Coroutines.Yeilds
+﻿namespace SiphoEngine.Core.Coroutines.Yeilds
 {
     public struct WaitOtherCoroutine : ICoroutineYield
     {

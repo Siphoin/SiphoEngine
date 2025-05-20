@@ -1,59 +1,59 @@
-﻿using SiphoEngine.Core.Coroutines.Yeilds;
-using SiphoEngine.Core.Coroutines;
-using SiphoEngine.Core.Debugging;
-
-public struct AsyncCoroutine
+﻿using SiphoEngine.Core.Coroutines;
+namespace SiphoEngine.Core.Coroutines
 {
-    
-    private IEnumerator<ICoroutineYield> _enumerator;
-   
-    private ICoroutineYield? _currentYield;
-
-    public Guid Id { get; private set; }
-
-
-    internal AsyncCoroutine(IEnumerator<ICoroutineYield> enumerator)
+    public struct AsyncCoroutine
     {
-        Id  = Guid.NewGuid();
-        _enumerator = enumerator;
-        _enumerator.MoveNext();
-        _currentYield = _enumerator.Current;
-    }
 
-    public bool IsDone { get; private set; }
-    public IEnumerator<ICoroutineYield> Enumerator => _enumerator;
+        private IEnumerator<ICoroutineYield> _enumerator;
 
-    internal bool Update(float deltaTime)
-    {
-        if (_currentYield != null)
+        private ICoroutineYield? _currentYield;
+
+        public Guid Id { get; private set; }
+
+
+        internal AsyncCoroutine(IEnumerator<ICoroutineYield> enumerator)
         {
-            bool isDone = _currentYield.IsDone(deltaTime);
-            if (isDone)
-            {
-                if (_enumerator.MoveNext())
-                {
-                    _currentYield = _enumerator.Current;
-                    return true;
-                }
+            Id = Guid.NewGuid();
+            _enumerator = enumerator;
+            _enumerator.MoveNext();
+            _currentYield = _enumerator.Current;
+        }
 
-                else
+        public bool IsDone { get; private set; }
+        public IEnumerator<ICoroutineYield> Enumerator => _enumerator;
+
+        internal bool Update(float deltaTime)
+        {
+            if (_currentYield != null)
+            {
+                bool isDone = _currentYield.IsDone(deltaTime);
+                if (isDone)
                 {
-                    IsDone = true;
-                    return false;
+                    if (_enumerator.MoveNext())
+                    {
+                        _currentYield = _enumerator.Current;
+                        return true;
+                    }
+
+                    else
+                    {
+                        IsDone = true;
+                        return false;
+                    }
                 }
             }
+
+            return true;
         }
-        
-        return true;
-    }
 
-    public override bool Equals(object obj)
-    {
-        return obj is AsyncCoroutine other && Id.Equals(other.Id);
-    }
+        public override bool Equals(object obj)
+        {
+            return obj is AsyncCoroutine other && Id.Equals(other.Id);
+        }
 
-    public override int GetHashCode()
-    {
-        return Id.GetHashCode();
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }

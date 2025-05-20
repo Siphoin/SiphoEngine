@@ -1,4 +1,7 @@
-﻿public interface ICoroutineRunner
+﻿namespace SiphoEngine.Core.Coroutines
 {
-    bool HasCoroutine(Guid guid);
+    public interface ICoroutineRunner
+    {
+        bool HasCoroutine(Guid guid);
+    }
 }
