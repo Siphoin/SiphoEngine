@@ -13,7 +13,7 @@ namespace SiphoEngine.Physics
         public override bool CheckCollision(Collider other, ref CollisionInfo info)
         {
 #if DEBUG
-            DebugDraw.DrawCircleCollider(Transform.Position, Radius, Offset);
+            DebugDraw.DrawCircle(Transform.Position, Radius, SFML.Graphics.Color.Green);
 #endif
 
             return CheckCollisionTypes(this, other, ref info);

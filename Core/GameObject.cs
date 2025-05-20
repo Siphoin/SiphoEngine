@@ -1,4 +1,5 @@
-﻿using SiphoEngine.Core.PlayerLoop;
+﻿using SiphoEngine.Core.Coroutines;
+using SiphoEngine.Core.PlayerLoop;
 using SiphoEngine.Core.SiphoEngine;
 
 namespace SiphoEngine.Core
@@ -6,6 +7,7 @@ namespace SiphoEngine.Core
     public class GameObject : Object, IDisposable
     {
         private List<Component> _components = new List<Component>();
+        private CoroutineRunner _coroutineRunner = new();
         private bool _activeSelf;
 
         public Transform Transform { get; private set; }
@@ -38,6 +40,8 @@ namespace SiphoEngine.Core
 
         public string Tag { get; set; }
         internal IEnumerable<Component> Components => _components;
+
+        public ICoroutineRunner CoroutineRunner => _coroutineRunner;
 
         public GameObject(string name = "GameObject")
         {
@@ -73,20 +77,48 @@ namespace SiphoEngine.Core
 
         public override void Destroy ()
         {
+            StopAllCoroutines();
             Scene?.DestroyGameObject(this);
             Dispose();
         }
 
-        public virtual void OnEnable() { }
-        public virtual void OnDisable() { }
+
+        internal AsyncCoroutine StartCoroutine(IEnumerator<ICoroutineYield> coroutine)
+        {
+           return _coroutineRunner.StartCoroutine(coroutine);
+        }
+
+        internal void DelayAction(float delay, Action action)
+        {
+            _coroutineRunner.DelayAction(delay, action);
+        }
+
+        internal void StopAllCoroutines()
+        {
+            _coroutineRunner?.StopAllCoroutines();
+        }
+
+        internal void StopCoroutine(ref AsyncCoroutine coroutine)
+        {
+           _coroutineRunner.StopCoroutine(ref coroutine);
+        }
+
+        internal void UpdateCoroutineRunner ()
+        {
+            _coroutineRunner.Update(Time.FixedDeltaTime);
+        }
 
 
         public void Dispose()
         {
+            StopAllCoroutines();
             foreach (var item in _components)
             {
                 item.Dispose();
             }
         }
+
+        public virtual void OnEnable() { }
+        public virtual void OnDisable() { }
     }
 }

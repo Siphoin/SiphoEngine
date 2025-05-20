@@ -48,6 +48,8 @@ namespace SiphoEngine.Core.Debugging
                         EnableRaisingEvents = true
                     };
                     _consoleProcess.Start();
+
+
                 }
                 else
                 {
@@ -58,6 +60,8 @@ namespace SiphoEngine.Core.Debugging
             {
                 Console.WriteLine($"Failed to launch debug console: {ex}");
             }
+
+          
         }
 
 

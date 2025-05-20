@@ -15,7 +15,7 @@ namespace SiphoEngine.Physics
         public override bool CheckCollision(Collider other, ref CollisionInfo info)
         {
 #if DEBUG
-            DebugDraw.DrawBoxCollider(Transform.Position, Size, Offset);
+            DebugDraw.DrawBox(Transform.Position, Size, SFML.Graphics.Color.Green);
 #endif
 
             return CheckCollisionTypes(this, other, ref info);

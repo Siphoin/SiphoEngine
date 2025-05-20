@@ -59,7 +59,7 @@ namespace SiphoEngine.Core
             };
         }
 
-        internal static void LateUpdate()
+        internal static void Update()
         {
             _keysDownThisFrame.Clear();
             _keysUpThisFrame.Clear();

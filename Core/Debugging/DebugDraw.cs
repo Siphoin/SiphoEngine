@@ -1,49 +1,66 @@
-﻿
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using SFML.System;
+using System.Collections.Generic;
 
 namespace SiphoEngine.Core.Debugging
 {
-    internal static class DebugDraw
+    public static class DebugDraw
     {
-        private static readonly RectangleShape _boxShape = new RectangleShape();
-        private static readonly CircleShape _circleShape = new CircleShape(0);
+        private static readonly List<Drawable> _shapes = new List<Drawable>();
         private static readonly List<Vertex[]> _lines = new List<Vertex[]>();
 
-        internal static void DrawBoxCollider(Vector2f position, Vector2f size, Vector2f offset)
+        // Примитивы для переиспользования
+        private static readonly RectangleShape _sharedRect = new RectangleShape();
+        private static readonly CircleShape _sharedCircle = new CircleShape(1f, 32);
+        private static readonly Vertex[] _lineBuffer = new Vertex[2];
+
+        public static void DrawBox(Vector2f position, Vector2f size, Color color, float thickness = 1f)
         {
-            // Используем один объект для всех прямоугольников
-            _boxShape.Size = size;
-            _boxShape.Position = position + offset - size / 2;
-            _boxShape.FillColor = Color.Transparent;
-            _boxShape.OutlineColor = Color.Green;
-            _boxShape.OutlineThickness = 1f;
-            GameEngine.MainWindow?.Draw(_boxShape);
+            _sharedRect.Size = size;
+            _sharedRect.Position = position - size / 2;
+            _sharedRect.FillColor = Color.Transparent;
+            _sharedRect.OutlineColor = color;
+            _sharedRect.OutlineThickness = thickness;
+            _shapes.Add(new RectangleShape(_sharedRect));
         }
 
-        internal static void DrawCircleCollider(Vector2f position, float radius, Vector2f offset)
+        public static void DrawCircle(Vector2f center, float radius, Color color, float thickness = 1f)
         {
-            _circleShape.Radius = radius;
-            _circleShape.Position = position + offset - new Vector2f(radius, radius);
-            _circleShape.FillColor = Color.Transparent;
-            _circleShape.OutlineColor = Color.Green;
-            _circleShape.OutlineThickness = 1f;
-
-            GameEngine.MainWindow?.Draw(_circleShape);
+            _sharedCircle.Radius = radius;
+            _sharedCircle.Position = center - new Vector2f(radius, radius);
+            _sharedCircle.FillColor = Color.Transparent;
+            _sharedCircle.OutlineColor = color;
+            _sharedCircle.OutlineThickness = thickness;
+            _shapes.Add(new CircleShape(_sharedCircle));
         }
 
-
-        internal static void Render(RenderTarget target)
+        public static void DrawLine(Vector2f start, Vector2f end, Color color)
         {
+            _lineBuffer[0] = new Vertex(start, color);
+            _lineBuffer[1] = new Vertex(end, color);
+            _lines.Add(new Vertex[] { _lineBuffer[0], _lineBuffer[1] });
+        }
+
+        public static void Render(RenderTarget target)
+        {
+            // Рисуем все фигуры
+            foreach (var shape in _shapes)
+            {
+                target.Draw(shape);
+            }
+
+            // Рисуем все линии
             foreach (var line in _lines)
             {
-                target.Draw(line, PrimitiveType.Lines);
+                target.Draw(line, 0, 2, PrimitiveType.Lines);
             }
-            _lines.Clear();
+
+            Clear();
         }
 
-        internal static void Clear()
+        public static void Clear()
         {
+            _shapes.Clear();
             _lines.Clear();
         }
     }

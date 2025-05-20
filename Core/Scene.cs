@@ -124,6 +124,12 @@ namespace SiphoEngine.Core
                     updatable.Update();
                 }
 
+                for (int i = 0; i < _gameObjects.Count; i++)
+                {
+                    GameObject? item = _gameObjects[i];
+                    item.UpdateCoroutineRunner();
+                }
+
                 HandleFixedUpdate(deltaTime);
 
                 HandleLateUpdate();
@@ -153,7 +159,7 @@ namespace SiphoEngine.Core
                 }
             }
 
-            public void Draw(RenderTarget target)
+            internal void Draw(RenderTarget target)
             {
                 for (int i = 0; i < _drawables.Count; i++)
                 {
@@ -161,6 +167,9 @@ namespace SiphoEngine.Core
                     drawable.Draw(target);
                 }
             }
+
+
+
         }
     }
 }
