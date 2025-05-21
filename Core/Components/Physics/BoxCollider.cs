@@ -93,7 +93,7 @@ namespace SiphoEngine.Physics
         public void Draw(RenderTarget target)
         {
 #if DEBUG
-          //  DebugDraw.DrawBox(Transform.Position, Size, Color.Green);
+           DebugDraw.DrawBox(Transform.Position, Size, Color.Green);
 #endif
         }
     }

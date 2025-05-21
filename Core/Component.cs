@@ -27,6 +27,18 @@ namespace SiphoEngine.Core
             return GameObject?.GetComponent<T>();
         }
 
+        public bool TryGetComponent<T>(out T? result) where T : Component
+        {
+
+            if (GameObject.TryGetComponent(out result))
+            {
+                return true;
+            }
+
+            result = null;
+            return false;
+        }
+
 
         public AsyncCoroutine StartCoroutine(IEnumerator<ICoroutineYield> coroutine)
         {

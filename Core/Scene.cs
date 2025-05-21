@@ -222,6 +222,35 @@ namespace SiphoEngine.Core
             }
 
 
+            public  T FindObjectWithType<T>() where T : Component
+            {
+                var component = _gameObjects.FirstOrDefault(x => x.TryGetComponent(out T _));
+
+                if (component is null)
+                {
+                    return null;
+                }
+
+                return component as T;
+            }
+            public IEnumerable<T> FindObjectsWithType<T>() where T : Component
+            {
+                List<T> list = new List<T>();
+                foreach (var gameObject in _gameObjects)
+                {
+                    foreach (var component in gameObject.Components)
+                    {
+                        if (component is T targetComponent)
+                        {
+                            list.Add(targetComponent);
+                        }
+                    }
+                }
+
+                return list;
+            }
+
+
 
         }
     }

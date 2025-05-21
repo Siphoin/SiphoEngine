@@ -76,6 +76,20 @@ namespace SiphoEngine.Core
             return _components.Find(c => c is T) as T;
         }
 
+        public bool TryGetComponent<T>(out T? result) where T : Component
+        {
+           object obj = _components.FirstOrDefault(x => x is T);
+
+            if (obj != null)
+            {
+                result = obj as T;
+            }
+
+            result = null;
+
+            return result != null;
+        }
+
         public override void Destroy ()
         {
             StopAllCoroutines();
