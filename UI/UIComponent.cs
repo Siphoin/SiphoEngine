@@ -7,7 +7,6 @@ namespace SiphoEngine.UI
     public abstract class UIComponent : Component, IAwakable
     {
         public event System.Action OnVisualChanged;
-        public bool IsActive { get; set; } = true;
 
         public RectTransform RectTransform { get; private set; }
 

@@ -16,6 +16,8 @@ namespace SiphoEngine.Components
         public Color Color { get; set; } = Color.White;
         public Vector2f Size { get; set; } = new Vector2f(50, 50);
 
+        public bool ActiveSelf => GameObject ? GameObject.ActiveSelf : false;
+
         public Texture Texture
         {
             get => _sprite?.Texture;

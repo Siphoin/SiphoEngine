@@ -14,6 +14,8 @@ namespace SiphoEngine.Physics
         public Vector2f Size { get; set; } = new Vector2f(64, 64);
         public Vector2f Offset { get; set; }
 
+        public bool ActiveSelf => GameObject ? GameObject.ActiveSelf : false;
+
         public override bool CheckCollision(Collider other, ref CollisionInfo info)
         {
 

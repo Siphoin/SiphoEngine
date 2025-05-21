@@ -185,7 +185,11 @@ namespace SiphoEngine.Core
                 for (int i = 0; i < _drawables.Count; i++)
                 {
                     IDrawable? drawable = _drawables[i];
-                    drawable.Draw(target);
+
+                    if (drawable.ActiveSelf)
+                    {
+                        drawable.Draw(target);
+                    }
                 }
             }
 

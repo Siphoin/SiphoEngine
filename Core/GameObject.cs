@@ -9,7 +9,7 @@ namespace SiphoEngine.Core
     {
         private List<Component> _components = new List<Component>();
         private CoroutineRunner _coroutineRunner = new();
-        private bool _activeSelf;
+        private bool _activeSelf = true;
 
         public Transform Transform { get; private set; }
 
@@ -127,6 +127,12 @@ namespace SiphoEngine.Core
                 foreach (var childComponent in child.GameObject.GetComponentsInChildren<T>())
                     yield return childComponent;
             }
+        }
+
+        public void SetActive (bool active)
+        {
+            ActiveSelf = active;
+
         }
 
         public override void Destroy ()

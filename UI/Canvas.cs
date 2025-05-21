@@ -16,6 +16,8 @@ namespace SiphoEngine.UI
         public Vector2f Size { get; private set; }
         public Color BackgroundColor { get; set; } = new Color(0, 0, 0, 0);
 
+        public bool ActiveSelf => GameObject ? GameObject.ActiveSelf : false;
+
         public void Awake()
         {
             Initialize(new Vector2f(800, 600));
@@ -56,7 +58,7 @@ namespace SiphoEngine.UI
             }
         }
 
-        public void MarkDirty()
+        internal void MarkDirty()
         {
             _needsRedraw = true;
         }
@@ -79,7 +81,7 @@ namespace SiphoEngine.UI
 
             foreach (var uiComponent in _uiComponents)
             {
-                if (uiComponent.IsActive)
+                if (uiComponent.GameObject.ActiveSelf)
                 {
                     uiComponent.Draw(_renderTexture);
                 }
