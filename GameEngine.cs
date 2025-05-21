@@ -48,6 +48,11 @@ namespace SiphoEngine
 
         public static Scene AddScene(Scene scene)
         {
+            if (_scenes.Contains(scene))
+            {
+                throw new InvalidOperationException($"Scene {scene.Name} exist.");
+            }
+
             _scenes.Add(scene);
 
             if (ActiveScene is null)
