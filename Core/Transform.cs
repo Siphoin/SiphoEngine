@@ -10,6 +10,28 @@ namespace SiphoEngine.Core
         private bool _isDirty = true;
         private Vector2f _cachedWorldPosition;
 
+        public IReadOnlyList<Transform> Children => _children.AsReadOnly();
+
+        public Transform GetChild(int index)
+        {
+            if (index < 0 || index >= _children.Count)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            return _children[index];
+        }
+
+        public bool TryGetChild(int index, out Transform child)
+        {
+            child = null;
+            if (index < 0 || index >= _children.Count)
+                return false;
+
+            child = _children[index];
+            return true;
+        }
+
+        public int ChildCount => _children.Count;
+
         public Vector2f Position
         {
             get => _localPosition;
@@ -53,7 +75,7 @@ namespace SiphoEngine.Core
         public Vector2f Scale { get; set; } = new Vector2f(1, 1);
         public float Rotation { get; set; } = 0f;
 
-        private void SetDirty()
+        protected void SetDirty()
         {
             if (_isDirty) return;
             _isDirty = true;

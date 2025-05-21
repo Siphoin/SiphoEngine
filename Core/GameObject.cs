@@ -90,6 +90,45 @@ namespace SiphoEngine.Core
             return result != null;
         }
 
+        public T GetComponentInParent<T>() where T : Component
+        {
+            Transform current = Transform;
+            while (current != null)
+            {
+                if (current.GameObject.GetComponent<T>() is T component)
+                    return component;
+
+                current = current.Parent;
+            }
+            return default;
+        }
+
+        public T GetComponentInChildren<T>() where T : Component
+        {
+            foreach (var child in Transform.Children)
+            {
+                if (child.GameObject.GetComponent<T>() is T component)
+                    return component;
+
+                var childComponent = child.GameObject.GetComponentInChildren<T>();
+                if (childComponent != null)
+                    return childComponent;
+            }
+            return default;
+        }
+
+        public IEnumerable<T> GetComponentsInChildren<T>() where T : Component
+        {
+            foreach (var child in Transform.Children)
+            {
+                if (child.GameObject.GetComponent<T>() is T component)
+                    yield return component;
+
+                foreach (var childComponent in child.GameObject.GetComponentsInChildren<T>())
+                    yield return childComponent;
+            }
+        }
+
         public override void Destroy ()
         {
             StopAllCoroutines();
@@ -134,5 +173,6 @@ namespace SiphoEngine.Core
 
         public virtual void OnEnable() { }
         public virtual void OnDisable() { }
+
     }
 }

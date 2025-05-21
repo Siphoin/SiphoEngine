@@ -12,6 +12,8 @@ namespace SiphoEngine.Core.ResourceSystem
 
         private const string DEFAULT_PATH_ASSETS = "Content";
 
+        public static ResourceManager Instance { get; private set; }
+
         internal ResourceManager(string contentFolder = "Content")
         {
             _contentRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, contentFolder);
@@ -20,6 +22,8 @@ namespace SiphoEngine.Core.ResourceSystem
             {
                 Directory.CreateDirectory(_contentRoot);
             }
+
+            Instance = this;
         }
 
         internal ResourceManager ()
@@ -29,6 +33,8 @@ namespace SiphoEngine.Core.ResourceSystem
             {
                 Directory.CreateDirectory(_contentRoot);
             }
+
+            Instance = this;
         }
 
         public T LoadAsset<T>(string path)

@@ -48,8 +48,9 @@ namespace SiphoEngine.Core
                 gameObject.Scene = this;
                 _gameObjects.Add(gameObject);
 
-                foreach (var component in gameObject.Components)
+                for (int i = 0; i < gameObject.Components.Count(); i++)
                 {
+                    var component = gameObject.Components.ElementAt(i);
                     RegisterComponent(component);
                 }
             }
