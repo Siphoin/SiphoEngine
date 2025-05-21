@@ -1,4 +1,5 @@
 ﻿using SFML.Graphics;
+using SiphoEngine.Core.Debugging;
 using SiphoEngine.Core.Physics;
 using SiphoEngine.Core.PlayerLoop;
 using SiphoEngine.Physics;
@@ -7,7 +8,7 @@ namespace SiphoEngine.Core
 {
     namespace SiphoEngine
     {
-        public abstract class Scene
+        public abstract class Scene : Object
         {
             private List<GameObject> _gameObjects = new List<GameObject>();
             private List<IUpdatable> _updatables = new List<IUpdatable>();
@@ -19,6 +20,7 @@ namespace SiphoEngine.Core
 
             public string Name { get; private set; }
             public bool IsInitialized { get; private set; }
+            public int CountGameObjects => _gameObjects.Count;
 
             public Scene()
             {
@@ -67,7 +69,15 @@ namespace SiphoEngine.Core
                         _awakables.Add(awakable);
                     }
                 }
-                if (component is IStartable startable) _startables.Add(startable);
+
+                if (component is IStartable startable)
+                {
+                    if (!_startables.Contains(startable))
+                    {
+                        startable.Start();
+                        _startables.Add(startable);
+                    }
+                }
                 if (component is IUpdatable updatable) _updatables.Add(updatable);
                 if (component is IFixedUpdatable fixedUpdatable) _fixedUpdatables.Add(fixedUpdatable);
                 if (component is ILateUpdatable lateUpdatable) _lateUpdatables.Add(lateUpdatable);
@@ -82,6 +92,8 @@ namespace SiphoEngine.Core
                 if (component is IFixedUpdatable fixedUpdatable) _fixedUpdatables.Remove(fixedUpdatable);
                 if (component is ILateUpdatable lateUpdatable) _lateUpdatables.Remove(lateUpdatable);
                 if (component is IDrawable drawable) _drawables.Remove(drawable);
+
+
             }
 
             internal void DestroyGameObject (GameObject go)
@@ -94,8 +106,16 @@ namespace SiphoEngine.Core
                     {
                         PhysicsEngine.UnregisterRigidbody(rigidbody);
                     }
+
+                    DestroyComponent(item);
                 }
                 _gameObjects.Remove(go);
+                go.Dispose();
+            }
+
+            internal void DestroyComponent (Component component)
+            {
+                component?.Dispose();
             }
 
             public virtual void Initialize()
@@ -170,10 +190,21 @@ namespace SiphoEngine.Core
 
             internal void Clear ()
             {
+#if DEBUG
+                int countUnload = 0;
+#endif
                 for (int i = 0; i < _gameObjects.Count; i++)
                 {
+                    _gameObjects[i].Dispose();
                     DestroyGameObject(_gameObjects[i]);
+#if DEBUG
+                    countUnload++;
+#endif
                 }
+
+#if DEBUG
+                Debug.Log($"Unload scene {Name}: count unloaded GameObjects: {countUnload}");
+#endif
 
                 _drawables.Clear();
                 _gameObjects.Clear();
@@ -181,6 +212,13 @@ namespace SiphoEngine.Core
                 _updatables.Clear();
                 _fixedUpdatables.Clear();
                 _lateUpdatables.Clear();
+                PhysicsEngine.ClearRigidbodies();
+                GC.Collect();
+            }
+
+            public override void Destroy()
+            {
+                throw new InvalidOperationException($"scene not support Destroy");
             }
 
 

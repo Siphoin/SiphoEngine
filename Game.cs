@@ -36,22 +36,19 @@ namespace SiphoEngine
                 fullscreen ? Styles.Fullscreen : Styles.Default
             );
 
-            // Настройка отображения
             _gameView = new View(new FloatRect(0, 0, width, height));
             _window.SetView(_gameView);
             _window.SetVerticalSyncEnabled(true);
-            _window.SetFramerateLimit(61); // Лимит чуть выше 60 для стабильности
+            _window.SetFramerateLimit(61);
 
-            // Инициализация систем
             GameEngine.InitializePrefabs();
+            GameEngine.InitializeScenes();
             GameEngine.InitializeWindow(_window);
             Input.Initialize(_window);
 
-            // Подписка на события
             _window.Closed += (sender, e) => _window.Close();
             _window.Resized += OnWindowResized;
 
-            // Точный таймер (Windows only)
             PreciseTimer.Initialize();
             var frameTimer = Stopwatch.StartNew();
             long lastFrameTicks = frameTimer.ElapsedTicks;
@@ -59,21 +56,17 @@ namespace SiphoEngine
             int frameCount = 0;
             float fpsTimer = 0f;
 
-            // Главный игровой цикл
             OnRunning?.Invoke();
             while (_window.IsOpen)
             {
-                // 1. Обработка событий
                 _window.DispatchEvents();
 
-                // 2. Обновление времени
                 long currentTicks = frameTimer.ElapsedTicks;
                 float rawDeltaTime = (currentTicks - lastFrameTicks) / (float)Stopwatch.Frequency;
                 lastFrameTicks = currentTicks;
 
                 Time.Update();
 
-                // 3. Фиксированное обновление (60 FPS)
                 frameTimeAccumulator += Time.DeltaTime;
                 while (frameTimeAccumulator >= Time.FixedDeltaTime)
                 {
@@ -95,7 +88,6 @@ namespace SiphoEngine
 
                 Input.Update();
 
-                // 7. Отображение
                 _window.Display();
 
                 float elapsedThisFrame = (frameTimer.ElapsedTicks - currentTicks) / (float)Stopwatch.Frequency;
@@ -108,7 +100,6 @@ namespace SiphoEngine
                     if (sleepMs > 0)
                         Thread.Sleep(sleepMs);
 
-                    // Активное ожидание последнего миллисекунда для точности
                     while ((frameTimer.ElapsedTicks - currentTicks) / (float)Stopwatch.Frequency < targetFrameTime) { }
                 }
 

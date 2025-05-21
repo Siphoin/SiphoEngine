@@ -1,22 +1,21 @@
-﻿using SFML.System;
+﻿using SFML.Graphics;
+using SFML.System;
 using SiphoEngine.Core;
 using SiphoEngine.Core.Debugging;
 using SiphoEngine.Core.Physics;
+using SiphoEngine.Core.PlayerLoop;
 using SiphoEngine.MathExtensions;
 
 
 namespace SiphoEngine.Physics
 {
-    public class BoxCollider : Collider
+    public class BoxCollider : Collider, IDrawable
     {
         public Vector2f Size { get; set; } = new Vector2f(64, 64);
         public Vector2f Offset { get; set; }
 
         public override bool CheckCollision(Collider other, ref CollisionInfo info)
         {
-#if DEBUG
-            DebugDraw.DrawBox(Transform.Position, Size, SFML.Graphics.Color.Green);
-#endif
 
             return CheckCollisionTypes(this, other, ref info);
         }
@@ -89,6 +88,13 @@ namespace SiphoEngine.Physics
         {
             Vector2f pos = Transform.Position + Offset;
             return pos + Size / 2;
+        }
+
+        public void Draw(RenderTarget target)
+        {
+#if DEBUG
+          //  DebugDraw.DrawBox(Transform.Position, Size, Color.Green);
+#endif
         }
     }
 }

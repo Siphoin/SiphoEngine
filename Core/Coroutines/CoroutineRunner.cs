@@ -40,13 +40,27 @@ namespace SiphoEngine.Core.Coroutines
         internal void Update(float deltaTime)
         {
             _isUpdating = true;
-            for (int i = 0; i < _activeCoroutines.Count; i++)
+            for (int i = _activeCoroutines.Count - 1; i >= 0; i--)
             {
-                bool isUpdate = _activeCoroutines[i].Update(deltaTime);
-                if (!isUpdate)
+                // Проверка на случай, если список был изменён в другом потоке
+                if (i >= _activeCoroutines.Count || i < 0)
+                    continue;
+
+                try
                 {
-                    Debug.Log($"{nameof(CoroutineRunner)}: stop coroutine call");
-                    _activeCoroutines.RemoveAt(i);
+                    bool isUpdate = _activeCoroutines[i].Update(deltaTime);
+                    if (!isUpdate)
+                    {
+                        Debug.Log($"{nameof(CoroutineRunner)}: stop coroutine call");
+                        _activeCoroutines.RemoveAt(i);
+                    }
+                }
+                catch
+                {
+                    if (i >= 0 && i < _activeCoroutines.Count)
+                    {
+                        _activeCoroutines.RemoveAt(i);
+                    }
                 }
             }
 

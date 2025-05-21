@@ -70,6 +70,12 @@ namespace SiphoEngine.Physics
         }
 
 
+        public override void Dispose()
+        {
+            PhysicsEngine.UnregisterRigidbody(this);
+            base.Dispose();
+        }
+
 
     }
 }

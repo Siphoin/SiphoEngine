@@ -80,7 +80,6 @@ namespace SiphoEngine.Core
         {
             StopAllCoroutines();
             Scene?.DestroyGameObject(this);
-            Dispose();
         }
 
 

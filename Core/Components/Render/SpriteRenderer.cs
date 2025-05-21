@@ -40,7 +40,7 @@ namespace SiphoEngine.Components
         {
             _fallbackShape = new RectangleShape(Size)
             {
-                FillColor = FallbackColor, // Используем скрытый цвет
+                FillColor = FallbackColor,
                 Origin = new Vector2f(Size.X / 2, Size.Y / 2)
             };
         }
@@ -63,6 +63,13 @@ namespace SiphoEngine.Components
                 _fallbackShape.Scale = Transform.Scale;
                 target.Draw(_fallbackShape);
             }
+        }
+
+        public override void Dispose()
+        {
+            _fallbackShape?.Dispose();
+            _sprite?.Dispose();
+            base.Dispose();
         }
     }
 }

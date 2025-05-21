@@ -1,4 +1,5 @@
 ﻿using SFML.System;
+using SiphoEngine.Core.Debugging;
 using SiphoEngine.MathExtensions;
 using SiphoEngine.Physics;
 
@@ -27,18 +28,20 @@ namespace SiphoEngine.Core.Physics
 
         internal static void UnregisterRigidbody(Rigidbody rigidbody)
         {
-            if (rigidbody != null && _rigidbodies.Contains(rigidbody))
+            if (rigidbody&& _rigidbodies.Contains(rigidbody))
             {
                 _rigidbodies.Remove(rigidbody);
-                rigidbody.Dispose(); // Добавляем очистку
+                rigidbody.Dispose();
             }
         }
 
         internal static void Update(float fixedTime)
         {
             // Update physics first
-            foreach (var rb in _rigidbodies)
+            for (int i = 0; i < _rigidbodies.Count; i++)
             {
+
+                Rigidbody? rb = _rigidbodies[i];
                 if (EnableGravity && rb.UseGravity)
                     rb.AddForce(_gravity * rb.Mass);
 
@@ -105,6 +108,17 @@ namespace SiphoEngine.Core.Physics
             Vector2f impulse = j * info.Normal;
             info.A.ApplyImpulse(-impulse);
             info.B.ApplyImpulse(impulse);
+        }
+
+        internal static void ClearRigidbodies ()
+        {
+            for (int i = 0; i < _rigidbodies.Count; i++)
+            {
+                _rigidbodies[i].Dispose();
+
+            }
+
+            _rigidbodies.Clear();
         }
     }
 }

@@ -54,7 +54,7 @@ namespace SiphoEngine.Core
             GameObject?.Destroy();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             GameObject?.Scene?.UnregisterComponent(this);
             GameObject = null;

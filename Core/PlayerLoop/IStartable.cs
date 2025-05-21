@@ -1,6 +1,6 @@
 ﻿namespace SiphoEngine.Core.PlayerLoop
 {
-    internal interface IStartable
+    public interface IStartable
     {
         void Start();
     }
