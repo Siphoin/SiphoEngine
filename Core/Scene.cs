@@ -168,6 +168,21 @@ namespace SiphoEngine.Core
                 }
             }
 
+            internal void Clear ()
+            {
+                for (int i = 0; i < _gameObjects.Count; i++)
+                {
+                    DestroyGameObject(_gameObjects[i]);
+                }
+
+                _drawables.Clear();
+                _gameObjects.Clear();
+                _awakables.Clear();
+                _updatables.Clear();
+                _fixedUpdatables.Clear();
+                _lateUpdatables.Clear();
+            }
+
 
 
         }

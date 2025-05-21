@@ -54,7 +54,12 @@ namespace SiphoEngine
             {
                 LoadScene(scene);
             }
-            return scene;
+
+            else
+            {
+                ActiveScene.Clear();
+            }
+                return scene;
         }
 
         public static void LoadScene(Scene scene)
