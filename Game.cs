@@ -7,6 +7,7 @@ using SiphoEngine.Core.Audio;
 using SiphoEngine.Core.Components.Render;
 using SiphoEngine.Core.Debugging;
 using SiphoEngine.Core.Physics;
+using SiphoEngine.Core.ResourceSystem;
 using Debug = SiphoEngine.Core.Debugging.Debug;
 using Time = SiphoEngine.Core.Time;
 
@@ -14,12 +15,31 @@ namespace SiphoEngine
 {
     public sealed class Game
     {
+        public event Action? OnRunning;
+        public event Action? OnLoadAssets;
         private View _gameView;
         private RenderWindow? _window;
         private bool _fullscreen;
-        private float _frameTimeAccumulator;
+        private bool _isActive;
+        private string _contextRootPath;
 
-        public event Action? OnRunning;
+        public string ContentRootPath
+        {
+            get
+            {
+                return _contextRootPath;
+            }
+
+            set
+            {
+                if (!_isActive)
+                {
+                    _contextRootPath = value;
+                }
+            }
+        }
+
+        public ResourceManager ResourceManager { get; private set; }
 
         public void Run(uint width = 800, uint height = 600, string title = "SiphoEngine Game", bool fullscreen = false)
         {
@@ -41,6 +61,8 @@ namespace SiphoEngine
             _window.SetVerticalSyncEnabled(true);
             _window.SetFramerateLimit(61);
 
+            InitializeResources();
+
             GameEngine.InitializePrefabs();
             GameEngine.InitializeScenes();
             GameEngine.InitializeWindow(_window);
@@ -55,7 +77,7 @@ namespace SiphoEngine
             float frameTimeAccumulator = 0f;
             int frameCount = 0;
             float fpsTimer = 0f;
-
+            _isActive = true;
             OnRunning?.Invoke();
             while (_window.IsOpen)
             {
@@ -112,9 +134,28 @@ namespace SiphoEngine
                     fpsTimer = 0f;
                 }
             }
+
+            _isActive = false;
 #if DEBUG
             Debug.Shutdown();
 #endif
+        }
+
+        private void InitializeResources()
+        {
+            if (string.IsNullOrEmpty(_contextRootPath))
+            {
+                ResourceManager = new ResourceManager();
+            }
+
+            else
+            {
+                ResourceManager = new ResourceManager(_contextRootPath);
+            }
+
+            OnLoadAssets?.Invoke();
+
+
         }
 
         private void OnWindowResized(object sender, SizeEventArgs e)
