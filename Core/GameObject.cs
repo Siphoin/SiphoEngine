@@ -95,6 +95,7 @@ namespace SiphoEngine.Core
             Transform current = Transform;
             while (current != null)
             {
+
                 if (current.GameObject.GetComponent<T>() is T component)
                     return component;
 
